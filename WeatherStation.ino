@@ -4,7 +4,6 @@
 float temperature;
 float humidity;
 float pressure;
-float altitude;
 float rainAmount;
 int windSpeed;
 
@@ -41,24 +40,23 @@ void setup(void) {
 
 void loop() {
     delay(5000);
+    GetBmeData();
 
     cli();
-    
-    GetBmeData();
+
     CalculateWindSpeed();
     CalculateRainAmount();
+    ClearPulses();
 
     Serial.print("Temperatura: ");
     Serial.print(temperature);
     Serial.print(" Humedad: ");
     Serial.print(humidity);
     Serial.print(" Presión: ");
-    Serial.println(pressure);
-    Serial.print("Altitud: ");
-    Serial.println(altitude);
-    Serial.print("Viento: ");
-    Serial.println(windSpeed);
-    Serial.print("Lluvia: ");
+    Serial.print(pressure);
+    Serial.print(" Viento: ");
+    Serial.print(windSpeed);
+    Serial.print(" Lluvia: ");
     Serial.print(rainAmount);
     Serial.println();
 
@@ -82,6 +80,12 @@ void CalculateWindSpeed(){
 void CalculateRainAmount(){
     // Each rain pulse means 272 mililiters per square meter.
     rainAmount = rainPulses * 0.272;
+}
+
+void ClearPulses(){
+    // Reset pulses count.
+    windPulses = 0;
+    rainPulses = 0;
 }
 
 void WindHandler() {
